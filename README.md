@@ -1,8 +1,7 @@
 # Name of the App
 ```
-One Liner about the app
-```
 _Built at UCL's & Microsoft's [Data Science Challenge](http://www.ucl.dsschack.com/)_
+```
 
 ##Idea of the App
 
