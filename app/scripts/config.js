@@ -11,21 +11,7 @@ function config($stateProvider, $urlRouterProvider) {
 
     $stateProvider
 
-        .state('login', {
-            url: "/login",
-            templateUrl: "views/login.html",
-            data: { pageTitle: 'Login', specialClass: 'gray-bg' }
-        })
-        .state('register', {
-            url: "/register",
-            templateUrl: "views/register.html",
-            data: { pageTitle: 'Register', specialClass: 'gray-bg' }
-        })
-        .state('forgot_password', {
-            url: "/forgot_password",
-            templateUrl: "views/forgot_password.html",
-            data: { pageTitle: 'Forgot password', specialClass: 'gray-bg' }
-        })
+
         .state('index', {
             abstract: true,
             url: "/index",
@@ -36,39 +22,12 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/main.html",
             data: { pageTitle: 'Example view' }
         })
-        .state('index.minor', {
-            url: "/minor",
-            templateUrl: "views/minor.html",
+        .state('index.question1', {
+            url: "/question1",
+            templateUrl: "views/question1.html",
             data: { pageTitle: 'Example view' }
         })
-        .state('index.main2', {
-            url: "/main2",
-            templateUrl: "views/main2.html",
-            data: { pageTitle: 'Example view' }
-        })
-        .state('commerce', {
-            abstract: true,
-            url: "/commerce",
-            templateUrl: "views/common/content.html",
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            files: ['bower_components/footable/footable.all.min.js', 'bower_components/footable/footable.core.css']
-                        },
-                        {
-                            name: 'ui.footable',
-                            files: ['bower_components/footable/angular-footable.js']
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('commerce.products_grid', {
-            url: "/products_grid",
-            templateUrl: "views/ecommerce_products_grid.html",
-            data: { pageTitle: 'E-commerce grid' }
-        })
+
 
 }
 angular
