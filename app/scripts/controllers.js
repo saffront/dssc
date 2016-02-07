@@ -44,8 +44,12 @@ angular
         var yellow = new Microsoft.Maps.Color(70, 241, 196, 15);
         var orange = new Microsoft.Maps.Color(30, 243, 156, 18);
 
-        function drawShapesonCanvas(arrayFinal){
-            var shape = new Microsoft.Maps.Polygon(arrayFinal,{fillColor: blue, strokeColor:darkblue});
+        function drawShapesonCanvas(arrayFinal, polyinfobox){
+            var shape = new Microsoft.Maps.Polygon(arrayFinal,{
+                fillColor: blue,
+                strokeColor:darkblue,
+                infobox: polyinfobox
+            });
             map.entities.push(shape);
         }
 
@@ -250,7 +254,27 @@ angular
                 for (var prop in obj) {
                     // skip loop if the property is from prototype
                     if(!obj.hasOwnProperty(prop)) continue;
-                    drawShapesonCanvas(districtsToArray(obj["coordinates"]));
+
+                    var center = map.getCenter();
+
+                    // Create an info box
+                    var infoboxOptions = {
+                        width: 300,
+                        height: 100,
+                        title: 'Testing', // sourceItems.data.dataset[0].data[index].key,
+                        description: "Visits: 20", // + sourceItems.data.dataset[0].data[index].visits,
+                        showPointer: true,
+                        titleClickHandler: this.polygonInfo,
+                        offset: new Microsoft.Maps.Point(-100, 0),
+                        typeName: Microsoft.Maps.InfoboxType.mini,
+                        zIndex: 1000
+                    };
+
+                    var polyinfobox = new Microsoft.Maps.Infobox(center, infoboxOptions);
+
+                    drawShapesonCanvas(districtsToArray(obj["coordinates"], polyinfobox));
+
+
                 }
             }
 
@@ -290,6 +314,7 @@ angular
                 trafficVisible = true;
             }
         };
+
         $scope.toggleMapStyle = function() {
             if (currentMapStyle === 1){
                 map.setView({mapTypeId : mapTypeID[currentMapStyle]});
@@ -313,6 +338,18 @@ angular
                 districtsVisible = true;
             }
         };
+
+        displayInfo = function (e)
+        {
+        console.log(e);
+        };
+
+        // LISTENERS
+
+        $timeout(function() {
+            var attachclick = Microsoft.Maps.Events.addHandler(map, 'click',displayInfo);
+        });
+
 
 
 
