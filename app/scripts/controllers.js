@@ -44,11 +44,11 @@ angular
         var yellow = new Microsoft.Maps.Color(70, 241, 196, 15);
         var orange = new Microsoft.Maps.Color(30, 243, 156, 18);
 
-        function drawShapesonCanvas(arrayFinal, polyinfobox){
+        function drawShapesonCanvas(arrayFinal, title){
             var shape = new Microsoft.Maps.Polygon(arrayFinal,{
                 fillColor: blue,
                 strokeColor:darkblue,
-                infobox: polyinfobox
+                districtTitle: title
             });
             map.entities.push(shape);
         }
@@ -231,7 +231,7 @@ angular
                 showDashboard: false,
                 enableSearchLogo: false,
                 center: new Microsoft.Maps.Location(51.5072, -0.1275),
-                zoom: 10,
+                zoom: 10
             });
 
             Microsoft.Maps.loadModule('Microsoft.Maps.Traffic', { callback: function() {
@@ -241,8 +241,32 @@ angular
 
         GetMap();
 
+        //
+        //function infoBoxClickEvent()
+        //{
+        //    map.entities.clear();
+        //    var infoboxOptions = {
+        //        width :200,
+        //        height :100,
+        //        showCloseButton: true,
+        //        zIndex: 1000,
+        //        offset:new Microsoft.Maps.Point(10,0),
+        //        showPointer: true,
+        //        title:'Infobox Title',
+        //        description:'Infobox description' };
+        //
+        //    var defaultInfobox = new Microsoft.Maps.Infobox(map.getCenter(), null );
+        //    Microsoft.Maps.Events.addHandler(map, 'click', function () {
+        //        alert('Infobox Mouse Click');
+        //    });
+        //}
+
+
         $timeout(function() {
             drawDistricts();
+            //$timeout(function() {
+            //    infoBoxClickEvent()
+            //});
         });
 
         function drawDistricts(){
@@ -254,54 +278,12 @@ angular
                 for (var prop in obj) {
                     // skip loop if the property is from prototype
                     if(!obj.hasOwnProperty(prop)) continue;
-
-                    var center = map.getCenter();
-
-                    // Create an info box
-                    var infoboxOptions = {
-                        width: 300,
-                        height: 100,
-                        title: 'Testing', // sourceItems.data.dataset[0].data[index].key,
-                        description: "Visits: 20", // + sourceItems.data.dataset[0].data[index].visits,
-                        showPointer: true,
-                        titleClickHandler: this.polygonInfo,
-                        offset: new Microsoft.Maps.Point(-100, 0),
-                        typeName: Microsoft.Maps.InfoboxType.mini,
-                        zIndex: 1000
-                    };
-
-                    var polyinfobox = new Microsoft.Maps.Infobox(center, infoboxOptions);
-
-                    drawShapesonCanvas(districtsToArray(obj["coordinates"], polyinfobox));
-
-
+                    drawShapesonCanvas(districtsToArray(obj["coordinates"]), key);
                 }
             }
 
             console.log(map.entities);
         }
-
-
-        //$scope.ChangePolygonColor = function() {
-        //    // Get the map square entity. We know square was the last entity added,
-        //    //    so we can calculate the index.
-        //    var mapSquare = map.entities.get(map.entities.getLength()-1);
-        //
-        //    // Get the current color
-        //    var currentColor = mapSquare.getFillColor();
-        //
-        //    if((currentColor.toString()) == (purple.toString()))
-        //    {
-        //        // Change it to green
-        //        mapSquare.setOptions({fillColor: green, strokeColor:green});
-        //    }
-        //    else
-        //    {
-        //        // Change it back to purple
-        //        mapSquare.setOptions({fillColor:purple, strokeColor:purple});
-        //    }
-        //};
-
 
 
         $scope.toggleTraffic = function() {
@@ -328,8 +310,13 @@ angular
 
         $scope.toggleDistricts = function() {
             if (districtsVisible === true){
-                map.entities.clear();
-                districtsVisible = false;
+                for(var i=map.entities.getLength()-1;i>=0;i--) {
+                    var polygon = map.entities.get(i);
+                    if (polygon instanceof Microsoft.Maps.Polygon) {
+                        map.entities.removeAt(i);
+                    }
+                }
+                    districtsVisible = false;
             }
             else{
                 $timeout(function() {
@@ -348,6 +335,8 @@ angular
 
         $timeout(function() {
             var attachclick = Microsoft.Maps.Events.addHandler(map, 'click',displayInfo);
+            console.log(districts[1]);
+
         });
 
 
