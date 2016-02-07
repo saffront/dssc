@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml"> <head> <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> <title>Working with Shapes</title> <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.3"></script> <script type="text/javascript">var map;
+
+        function OnPageLoad()
+        {
+            map = new VEMap('myMap');
+            map.LoadMap();
+
+            var layer = new VEShapeLayer();
+
+            // Windows Live Local
+            var veLayerSpec = new VEShapeSourceSpecification(VEDataType.VECollection, "98C746DDDC3FE6CA!104", layer);
+
+            map.ImportShapeLayerData(veLayerSpec, function()
+            {
+                var numShapes = layer.GetShapeCount();
+                var s, n, icon;
+
+                for(var i = 0; i < numShapes; ++i)
+                {
+                    s = layer.GetShapeByIndex(i);
+
+                    n = i + 1;
+                    icon = "<img src='orange_pushpin.png'><span class='pinText'>" + " " + n + "</span>";
+                    s.SetCustomIcon(icon);
+                }
+            }, true);
+
+
+             var veLayerSpec = new VEShapeSourceSpecification(VEDataType.ImportXML, "map.kml", layer);
+
+             map.ImportShapeLayerData(veLayerSpec);
+
+             var pin = new VEShape(VEShapeType.Pushpin, map.GetCenter());
+
+             pin.SetTitle("Our PushPin Title");
+             pin.SetDescription("<table><tr><td>Description:<br/><ul><li>HTML elements</li> <li> " +
+                                "Images</li><li>And More</li></ul></td><td><img src='arrows.png'></td></tr></table>");
+
+             var icon = "<img src='orange_pushpin.png'/>";
+
+             var icon = "<div style='font-size:12px;font-weight:bold;border:solid 2px" +
+                        "Black;background-color:Aqua;width:50px;'>Our Pin</div>";
+
+             var n = " 1";
+             var icon = "<img src='orange_pushpin.png'><span class='pinText'>" + n + "</span>";
+
+             pin.SetCustomIcon(icon);
+
+             map.AddShape(pin);
+        }</script> <style type="text/css">.pinText
+        {
+            position:relative;
+            top:-30px;
+            left:10px;
+            width:30px;
+            color:#ffffff;
+            text-align:center;
+            font: bold 12px Arial;
+        }</style>  <body onload="OnPageLoad()"> <div id="myMap" style="position:relative;width:640px;height:480px"></div>  
