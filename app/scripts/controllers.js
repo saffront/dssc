@@ -26,14 +26,26 @@ angular
 
 
         var map = null;
+        var districtsVisible = true;
+        var trafficVisible = false;
+        var trafficLayer = null;
+        var currentMapStyle = 0;
+        var mapTypeID = [
+            Microsoft.Maps.MapTypeId.road,
+            Microsoft.Maps.MapTypeId.aerial
+        ];
+
 
         // Define colors
-        var blue = new Microsoft.Maps.Color(100, 0, 0, 200);
-        var green = new Microsoft.Maps.Color(100, 0, 100, 100);
-        var purple = new Microsoft.Maps.Color(100, 100, 0, 100);
+        var blue = new Microsoft.Maps.Color(20, 0, 0, 200);
+        var darkblue = new Microsoft.Maps.Color(70, 0, 0, 200);
+        var green = new Microsoft.Maps.Color(20, 0, 100, 100);
+        var purple = new Microsoft.Maps.Color(70, 100, 0, 100);
+        var yellow = new Microsoft.Maps.Color(70, 241, 196, 15);
+        var orange = new Microsoft.Maps.Color(30, 243, 156, 18);
 
         function drawShapesonCanvas(arrayFinal){
-            var shape = new Microsoft.Maps.Polygon(arrayFinal,{fillColor: green, strokeColor:purple});
+            var shape = new Microsoft.Maps.Polygon(arrayFinal,{fillColor: blue, strokeColor:darkblue});
             map.entities.push(shape);
         }
 
@@ -174,7 +186,6 @@ angular
         };
 
 
-
         function districtsToArray(districtCoordinates) {
             var arrayFinal = [];
             var array = districtCoordinates.split(',');
@@ -214,37 +225,23 @@ angular
             map = new Microsoft.Maps.Map(document.getElementById("map"),{
                 credentials:"Anh54d2CmgiHZPDaC_I95ysjp1Ran9P7SvgcH3d2FAWG_3My9A3tjvBg6me6sDkc",
                 showDashboard: false,
+                enableSearchLogo: false,
                 center: new Microsoft.Maps.Location(51.5072, -0.1275),
-                zoom: 8,
-
+                zoom: 10,
             });
+
+            Microsoft.Maps.loadModule('Microsoft.Maps.Traffic', { callback: function() {
+                trafficLayer = new Microsoft.Maps.Traffic.TrafficLayer(map);
+            }});
         }
-
-        $scope.ChangePolygonColor = function() {
-            // Get the map square entity. We know square was the last entity added,
-            //    so we can calculate the index.
-            var mapSquare = map.entities.get(map.entities.getLength()-1);
-
-            // Get the current color
-            var currentColor = mapSquare.getFillColor();
-
-            if((currentColor.toString()) == (purple.toString()))
-            {
-                // Change it to green
-                mapSquare.setOptions({fillColor: green, strokeColor:green});
-            }
-            else
-            {
-                // Change it back to purple
-                mapSquare.setOptions({fillColor:purple, strokeColor:purple});
-            }
-        };
-
 
         GetMap();
 
         $timeout(function() {
+            drawDistricts();
+        });
 
+        function drawDistricts(){
             for (var key in districts) {
                 // skip loop if the property is from prototype
                 if (!districts.hasOwnProperty(key)) continue;
@@ -256,7 +253,67 @@ angular
                     drawShapesonCanvas(districtsToArray(obj["coordinates"]));
                 }
             }
-        });
+
+            console.log(map.entities);
+        }
+
+
+        //$scope.ChangePolygonColor = function() {
+        //    // Get the map square entity. We know square was the last entity added,
+        //    //    so we can calculate the index.
+        //    var mapSquare = map.entities.get(map.entities.getLength()-1);
+        //
+        //    // Get the current color
+        //    var currentColor = mapSquare.getFillColor();
+        //
+        //    if((currentColor.toString()) == (purple.toString()))
+        //    {
+        //        // Change it to green
+        //        mapSquare.setOptions({fillColor: green, strokeColor:green});
+        //    }
+        //    else
+        //    {
+        //        // Change it back to purple
+        //        mapSquare.setOptions({fillColor:purple, strokeColor:purple});
+        //    }
+        //};
+
+
+
+        $scope.toggleTraffic = function() {
+            if (trafficVisible === true){
+                trafficLayer.hide();
+                trafficVisible = false;
+            }
+            else{
+                trafficLayer.show();
+                trafficVisible = true;
+            }
+        };
+        $scope.toggleMapStyle = function() {
+            if (currentMapStyle === 1){
+                map.setView({mapTypeId : mapTypeID[currentMapStyle]});
+                currentMapStyle = 0;
+            }
+            else{
+                map.setView({mapTypeId : mapTypeID[currentMapStyle]});
+                currentMapStyle = 1;
+            }
+        };
+
+        $scope.toggleDistricts = function() {
+            if (districtsVisible === true){
+                map.entities.clear();
+                districtsVisible = false;
+            }
+            else{
+                $timeout(function() {
+                    drawDistricts();
+                });
+                districtsVisible = true;
+            }
+        };
+
 
 
 
