@@ -32,6 +32,21 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/question2.html",
             data: { pageTitle: 'Example view' }
         })
+        .state('index.question3', {
+            url: "/question3",
+            templateUrl: "views/question3.html",
+            data: { pageTitle: 'Example view' }
+        })
+        .state('index.question4', {
+            url: "/question4",
+            templateUrl: "views/question4.html",
+            data: { pageTitle: 'Example view' }
+        })
+        .state('index.question5', {
+            url: "/question5",
+            templateUrl: "views/question5.html",
+            data: { pageTitle: 'Example view' }
+        })
         .state('index.map', {
             url: "/map",
             templateUrl: "views/map.html",

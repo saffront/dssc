@@ -336,7 +336,6 @@ angular
         $timeout(function() {
             var attachclick = Microsoft.Maps.Events.addHandler(map, 'click',displayInfo);
             console.log(districts[1]);
-
         });
 
 
