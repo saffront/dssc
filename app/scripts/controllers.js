@@ -209,8 +209,7 @@ angular
             return arrayFinal;
         }
 
-        function GetMap()
-        {
+        function GetMap() {
             // Initialize the map
             map = new Microsoft.Maps.Map(document.getElementById("map"),{
                 credentials:"Anh54d2CmgiHZPDaC_I95ysjp1Ran9P7SvgcH3d2FAWG_3My9A3tjvBg6me6sDkc",
@@ -219,30 +218,9 @@ angular
                 zoom: 8,
 
             });
-
-
-            var location1 = new Microsoft.Maps.Location(20,-20);
-            var location2 = new Microsoft.Maps.Location(20,20);
-            var location3 = new Microsoft.Maps.Location(-20,20);
-            var location4 = new Microsoft.Maps.Location(-20, -20);
-            var location5 = new Microsoft.Maps.Location(40, 0);
-
-
-            // Create some shapes
-            var triangleVertices = new Array(location1, location2, location5, location1);
-            var triangle = new Microsoft.Maps.Polygon(triangleVertices, { fillColor: blue, strokeColor: blue });
-
-            var squareVertices = new Array(location1, location2, location3, location4, location1);
-            var square = new Microsoft.Maps.Polygon(squareVertices,{fillColor: purple, strokeColor:purple});
-
-            // Add the shapes to the map
-            map.entities.push(triangle);
-            map.entities.push(square);
         }
 
-
-        $scope.ChangePolygonColor = function()
-        {
+        $scope.ChangePolygonColor = function() {
             // Get the map square entity. We know square was the last entity added,
             //    so we can calculate the index.
             var mapSquare = map.entities.get(map.entities.getLength()-1);
@@ -263,7 +241,6 @@ angular
         };
 
 
-
         GetMap();
 
         $timeout(function() {
@@ -281,67 +258,6 @@ angular
             }
         });
 
-        // GOOGLE MAPS
-        //$scope.mapOptions = {
-        //
-        //    scrollwheel: true,
-        //    navigationControl: false,
-        //    mapTypeControl: false,
-        //    scaleControl: false,
-        //    draggable: true,
-        //    minZoom: 11,
-        //    zoom: 11,
-        //    center: new google.maps.LatLng(51.5072, -0.1275),
-        //    mapTypeId: google.maps.MapTypeId.TERRAIN
-        //
-        //};
-        //
-        //$scope.map = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
-        //
-        //
-        //// Define the LatLng coordinates for the polygon's path.
-        //var triangleCoords = [
-        //    {lat: 51.5072, lng: -80.190},
-        //    {lat: 58.5072, lng: -66.118},
-        //    {lat: 57.5072, lng: -64.757},
-        //    {lat: 53.5072, lng: -80.190}
-        //];
-        //
-        //// Construct the polygon.
-        //var bermudaTriangle = new google.maps.Polygon({
-        //    paths: triangleCoords,
-        //    strokeColor: '#FF0000',
-        //    strokeOpacity: 0.8,
-        //    strokeWeight: 2,
-        //    fillColor: '#FF0000',
-        //    fillOpacity: 0.35
-        //});
-        //bermudaTriangle.setMap(this.map);
-        //
-        //
-        //
-        //
-        //google.maps.event.addListener(map,'center_changed',function() { checkBounds(); });
-        //
-        //function checkBounds() {
-        //    if(! allowedBounds.contains(map.getCenter())) {
-        //        var C = map.getCenter();
-        //        var X = C.lng();
-        //        var Y = C.lat();
-        //
-        //        var AmaxX = allowedBounds.getNorthEast().lng();
-        //        var AmaxY = allowedBounds.getNorthEast().lat();
-        //        var AminX = allowedBounds.getSouthWest().lng();
-        //        var AminY = allowedBounds.getSouthWest().lat();
-        //
-        //        if (X < AminX) {X = AminX;}
-        //        if (X > AmaxX) {X = AmaxX;}
-        //        if (Y < AminY) {Y = AminY;}
-        //        if (Y > AmaxY) {Y = AmaxY;}
-        //
-        //        map.setCenter(new google.maps.LatLng(Y,X));
-        //    }
-        //}
 
 
     });
